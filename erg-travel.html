@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erg — Small-group journeys across Morocco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand: #EDE3D0;
+    --sand-dim: #E3D6BC;
+    --ink: #201A12;
+    --ink-soft: #52483A;
+    --indigo: #1F3F6E;
+    --ochre: #B97A2E;
+    --green: #2F6E5C;
+    --line: rgba(32,26,18,0.15);
+    --radius: 2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--sand);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.005em;
+  }
+  .mono{ font-family:'Space Mono', monospace; letter-spacing:0.02em; }
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 32px; }
+  :focus-visible{ outline:2px solid var(--indigo); outline-offset:3px; }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(237,227,208,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px; max-width:1120px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Newsreader', serif;
+    font-style:italic;
+    font-size:1.5rem; font-weight:500;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo .mark svg{width:20px; height:20px;}
+  .navlinks{ display:flex; gap:32px; font-size:0.92rem; list-style:none; margin:0; padding:0; }
+  .navlinks a{
+    text-decoration:none; color:var(--ink-soft);
+    border-bottom:1px solid transparent; padding-bottom:2px;
+    transition:border-color 0.2s, color 0.2s;
+  }
+  .navlinks a:hover{ color:var(--ink); border-color:var(--indigo); }
+  .navcta{
+    font-size:0.85rem; padding:9px 18px;
+    background:var(--indigo); color:var(--sand);
+    text-decoration:none; border-radius:var(--radius);
+  }
+  .navcta:hover{ background:var(--ink); }
+  @media (max-width:760px){ .navlinks, .navcta{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; padding:88px 0 64px;
+    overflow:hidden; border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr;
+    gap:48px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+  .eyebrow{
+    font-size:0.78rem; text-transform:uppercase; letter-spacing:0.14em;
+    color:var(--indigo); margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:''; width:28px; height:1px; background:var(--indigo); display:inline-block; }
+  .hero h1{ font-size:clamp(2.6rem, 5.2vw, 4.1rem); line-height:1.05; }
+  .hero h1 em{ font-style:italic; color:var(--ochre); }
+  .hero p.lead{ max-width:46ch; margin-top:24px; font-size:1.08rem; color:var(--ink-soft); }
+  .hero-actions{ margin-top:34px; display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+  .btn-primary{
+    background:var(--indigo); color:var(--sand);
+    padding:13px 26px; text-decoration:none; font-size:0.92rem;
+    border-radius:var(--radius); transition:background 0.2s;
+  }
+  .btn-primary:hover{ background:var(--ink); }
+  .btn-ghost{
+    text-decoration:none; font-size:0.92rem; color:var(--ink);
+    border-bottom:1px solid var(--ink); padding-bottom:2px;
+  }
+
+  /* zellige hero visual */
+  .zellige{ position:relative; aspect-ratio:1/1; max-width:460px; margin:0 auto; }
+  .zellige svg{ width:100%; height:100%; }
+  .tile{ fill:none; stroke:var(--ink); stroke-opacity:0.14; stroke-width:1; }
+  .tile-accent{ fill:var(--ochre); opacity:0.85; }
+  .route-path{
+    fill:none; stroke:var(--indigo); stroke-width:2.2;
+    stroke-dasharray:6 5; stroke-linecap:round;
+    animation:dash 40s linear infinite;
+  }
+  @keyframes dash{ to{ stroke-dashoffset:-500; } }
+  .waypoint{ fill:var(--sand); stroke:var(--indigo); stroke-width:1.4; }
+  .waypoint-label{ font-family:'Space Mono', monospace; font-size:9px; fill:var(--ink); }
+
+  /* ---------- PHILOSOPHY ---------- */
+  .philosophy{ padding:80px 0; border-bottom:1px solid var(--line); }
+  .phil-grid{ display:grid; grid-template-columns:0.6fr 1.4fr; gap:56px; }
+  @media (max-width:800px){ .phil-grid{grid-template-columns:1fr; gap:32px;} }
+  .phil-grid h2{ font-size:1.9rem; position:sticky; top:110px; align-self:start; }
+  .phil-item{
+    display:grid; grid-template-columns:70px 1fr; gap:20px;
+    padding:26px 0; border-top:1px solid var(--line);
+  }
+  .phil-item:last-child{ border-bottom:1px solid var(--line); }
+  .phil-item .num{ font-family:'Space Mono', monospace; color:var(--green); font-size:0.85rem; padding-top:3px; }
+  .phil-item h3{ font-size:1.15rem; margin-bottom:8px; font-weight:500; }
+  .phil-item p{ margin:0; color:var(--ink-soft); font-size:0.96rem; }
+
+  /* ---------- TRIPS ---------- */
+  .trips{ padding:80px 0; border-bottom:1px solid var(--line); }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:44px; gap:24px; flex-wrap:wrap;
+  }
+  .section-head h2{ font-size:2.1rem; }
+  .section-head p{ color:var(--ink-soft); max-width:38ch; font-size:0.95rem; }
+  .trip-cards{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  @media (max-width:860px){ .trip-cards{grid-template-columns:1fr;} }
+  .trip-card{ background:var(--sand); padding:32px; display:flex; flex-direction:column; transition:background 0.25s; }
+  .trip-card:hover{ background:var(--sand-dim); }
+  .trip-meta{
+    display:flex; justify-content:space-between;
+    font-family:'Space Mono', monospace; font-size:0.75rem;
+    color:var(--green); margin-bottom:20px;
+  }
+  .trip-card h3{ font-size:1.3rem; margin-bottom:10px; }
+  .trip-card p{ color:var(--ink-soft); font-size:0.92rem; flex-grow:1; }
+  .trip-stats{
+    display:flex; gap:18px; margin-top:20px; padding-top:16px;
+    border-top:1px solid var(--line);
+    font-family:'Space Mono', monospace; font-size:0.78rem; color:var(--ink-soft);
+  }
+  .trip-link{
+    margin-top:18px; font-size:0.85rem; text-decoration:none;
+    border-bottom:1px solid var(--ink); align-self:flex-start; padding-bottom:1px;
+  }
+  .trip-link:hover{ color:var(--indigo); border-color:var(--indigo); }
+
+  /* ---------- ITINERARY ---------- */
+  .itinerary{ padding:88px 0; background:var(--ink); color:var(--sand); border-bottom:1px solid var(--line); }
+  .itinerary .section-head p{ color:rgba(237,227,208,0.65); }
+  .itinerary .section-head h2{ color:var(--sand); }
+  .elevation{ position:relative; margin-top:56px; padding-bottom:8px; }
+  .elevation svg{ width:100%; height:auto; display:block; }
+  .elev-line{ fill:none; stroke:var(--ochre); stroke-width:2; }
+  .elev-fill{ fill:url(#elevGradient); opacity:0.5; }
+  .elev-day{ fill:var(--ink); stroke:var(--ochre); stroke-width:1.6; }
+  .day-list{ margin-top:28px; display:grid; grid-template-columns:repeat(6,1fr); gap:16px; }
+  @media (max-width:900px){ .day-list{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:600px){ .day-list{grid-template-columns:repeat(2,1fr);} }
+  .day-item .d-num{ font-family:'Space Mono', monospace; font-size:0.72rem; color:var(--ochre); }
+  .day-item h4{ font-family:'Newsreader', serif; font-weight:500; font-size:0.98rem; margin:6px 0 6px; }
+  .day-item p{ font-size:0.82rem; color:rgba(237,227,208,0.65); margin:0; }
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testimonials{ padding:80px 0; border-bottom:1px solid var(--line); }
+  .test-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:48px; }
+  @media (max-width:760px){ .test-grid{grid-template-columns:1fr;} }
+  .test-item blockquote{ margin:0; font-family:'Newsreader', serif; font-size:1.25rem; font-weight:400; line-height:1.4; font-style:italic; }
+  .test-item cite{ display:block; margin-top:16px; font-style:normal; font-size:0.82rem; color:var(--green); font-family:'Space Mono', monospace; }
+
+  /* ---------- CTA ---------- */
+  .cta{ padding:96px 0; text-align:center; }
+  .cta h2{ font-size:clamp(2rem, 4vw, 2.8rem); max-width:22ch; margin:0 auto 28px; }
+  .cta .btn-primary{ padding:15px 32px; font-size:0.98rem; }
+
+  footer{ border-top:1px solid var(--line); padding:40px 0; font-size:0.82rem; color:var(--ink-soft); }
+  .foot-grid{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14.8 9.2 L22 12 L14.8 14.8 L12 22 L9.2 14.8 L2 12 L9.2 9.2 Z" fill="none" stroke="#1F3F6E" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </span>
+      Erg
+    </div>
+    <ul class="navlinks">
+      <li><a href="#philosophy">How we travel</a></li>
+      <li><a href="#trips">Trips</a></li>
+      <li><a href="#itinerary">A sample route</a></li>
+      <li><a href="#testimonials">Words from the road</a></li>
+    </ul>
+    <a class="navcta" href="#cta">Plan your trip</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Small-group trips, six to a party</div>
+      <h1>From the medina<br>to the <em>Erg</em>.</h1>
+      <p class="lead">Erg designs slow overland journeys through Morocco — riads instead of hotels, mountain passes instead of motorways, and desert camps run by the same families for three generations.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#trips">See this season's trips</a>
+        <a class="btn-ghost" href="#philosophy">Why we travel slow →</a>
+      </div>
+    </div>
+    <div class="zellige" aria-hidden="true">
+      <svg viewBox="0 0 400 400">
+        <defs>
+          <pattern id="star" width="66" height="66" patternUnits="userSpaceOnUse">
+            <path class="tile" d="M33,4 L44,22 L64,22 L48,35 L54,55 L33,43 L12,55 L18,35 L2,22 L22,22 Z"/>
+          </pattern>
+        </defs>
+        <rect width="400" height="400" fill="url(#star)"/>
+        <path class="tile-accent" d="M100,100 L111,118 L131,118 L115,131 L121,151 L100,139 L79,151 L85,131 L69,118 L89,118 Z"/>
+        <path class="tile-accent" d="M298,298 L309,316 L329,316 L313,329 L319,349 L298,337 L277,349 L283,329 L267,316 L287,316 Z"/>
+        <path class="route-path" d="M60,110 L120,140 L160,200 L220,220 L260,300 L340,330"/>
+        <circle class="waypoint" cx="60" cy="110" r="5"/>
+        <circle class="waypoint" cx="160" cy="200" r="5"/>
+        <circle class="waypoint" cx="260" cy="300" r="5"/>
+        <circle class="waypoint" cx="340" cy="330" r="5"/>
+        <text class="waypoint-label" x="14" y="102">Marrakech · 466m</text>
+        <text class="waypoint-label" x="168" y="196">Tizi n'Tichka · 2260m</text>
+        <text class="waypoint-label" x="200" y="296">Ouarzazate · 1160m</text>
+        <text class="waypoint-label" x="270" y="352">Erg Chebbi · 750m</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy" id="philosophy">
+  <div class="wrap phil-grid">
+    <h2>Three things<br>we won't compromise on.</h2>
+    <div class="phil-list">
+      <div class="phil-item">
+        <div class="num mono">01</div>
+        <div>
+          <h3>No group bigger than a shared taxi</h3>
+          <p>Six travelers, one guide, one driver. Small enough to take the piste through the Draa Valley instead of the highway, and to sit down for tea when someone's grandmother insists.</p>
+        </div>
+      </div>
+      <div class="phil-item">
+        <div class="num mono">02</div>
+        <div>
+          <h3>You sleep behind the same doors as everyone else</h3>
+          <p>Riads booked directly through the families who run them, and desert camps set up by the same Amazigh guides who've led camel trains into the Erg for decades — not a franchised "glamp."</p>
+        </div>
+      </div>
+      <div class="phil-item">
+        <div class="num mono">03</div>
+        <div>
+          <h3>The route bends around the souk, not the schedule</h3>
+          <p>Every trip is timed loosely enough to sit through a slow mint tea, follow a tannery smell down an unplanned alley, or wait out an afternoon when the pass is closed for snow.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trips" id="trips">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>This season's routes</h2>
+      <p>Three trips, three landscapes. Each one runs twice a month, October through May.</p>
+    </div>
+    <div class="trip-cards">
+      <div class="trip-card">
+        <div class="trip-meta"><span>SAHARA CROSSING</span><span>6 DAYS</span></div>
+        <h3>Marrakech to the Erg</h3>
+        <p>Over the High Atlas at Tizi n'Tichka, down through the kasbahs of the Draa Valley, and into the dunes of Erg Chebbi by camel at sunset.</p>
+        <div class="trip-stats"><span>420 KM</span><span>+2,260 M</span><span>OCT–MAY</span></div>
+        <a class="trip-link" href="#cta">Reserve a place →</a>
+      </div>
+      <div class="trip-card">
+        <div class="trip-meta"><span>IMPERIAL CITIES</span><span>5 DAYS</span></div>
+        <h3>Fès &amp; Meknès Loop</h3>
+        <p>A slower week through the oldest medinas — tanneries, madrasas, and workshops with artisans who'll let you watch the whole process, tea in hand.</p>
+        <div class="trip-stats"><span>240 KM</span><span>—</span><span>YEAR-ROUND</span></div>
+        <a class="trip-link" href="#cta">Reserve a place →</a>
+      </div>
+      <div class="trip-card">
+        <div class="trip-meta"><span>ANTI-ATLAS</span><span>4 DAYS</span></div>
+        <h3>Tafraoute &amp; the Coast</h3>
+        <p>A compact loop through painted rock and argan groves, ending on the Atlantic ramparts of Essaouira for a long weekend by the water.</p>
+        <div class="trip-stats"><span>310 KM</span><span>—</span><span>MAR–NOV</span></div>
+        <a class="trip-link" href="#cta">Reserve a place →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="itinerary" id="itinerary">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Six days, one landscape at a time</h2>
+      <p>The Sahara Crossing, laid out by elevation — mountains first, desert last.</p>
+    </div>
+    <div class="elevation">
+      <svg viewBox="0 0 900 220" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="elevGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#B97A2E"/>
+            <stop offset="100%" stop-color="#201A12" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path class="elev-fill" d="M0,170 L150,150 L300,60 L450,110 L600,150 L750,175 L900,190 L900,220 L0,220 Z"/>
+        <path class="elev-line" d="M0,170 L150,150 L300,60 L450,110 L600,150 L750,175 L900,190"/>
+        <circle class="elev-day" cx="0" cy="170" r="5"/>
+        <circle class="elev-day" cx="150" cy="150" r="5"/>
+        <circle class="elev-day" cx="300" cy="60" r="5"/>
+        <circle class="elev-day" cx="450" cy="110" r="5"/>
+        <circle class="elev-day" cx="600" cy="150" r="5"/>
+        <circle class="elev-day" cx="750" cy="175" r="5"/>
+        <circle class="elev-day" cx="900" cy="190" r="5"/>
+      </svg>
+    </div>
+    <div class="day-list">
+      <div class="day-item">
+        <div class="d-num">DAY 1 · 466M</div>
+        <h4>Marrakech</h4>
+        <p>Medina orientation, dinner in the Mellah.</p>
+      </div>
+      <div class="day-item">
+        <div class="d-num">DAY 2 · 1160M</div>
+        <h4>Aït Ben Haddou</h4>
+        <p>Over the pass, into the kasbah town.</p>
+      </div>
+      <div class="day-item">
+        <div class="d-num">DAY 3 · 2260M</div>
+        <h4>Tizi n'Tichka</h4>
+        <p>The road's high point, weather permitting.</p>
+      </div>
+      <div class="day-item">
+        <div class="d-num">DAY 4 · 1382M</div>
+        <h4>Draa Valley</h4>
+        <p>Palm groves and kasbah ruins along the river.</p>
+      </div>
+      <div class="day-item">
+        <div class="d-num">DAY 5 · 900M</div>
+        <h4>Todra Gorge</h4>
+        <p>Canyon walls and a last night before the sand.</p>
+      </div>
+      <div class="day-item">
+        <div class="d-num">DAY 6 · 750M</div>
+        <h4>Erg Chebbi</h4>
+        <p>Camel out to camp, dinner under the dunes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+  <div class="wrap test-grid">
+    <div class="test-item">
+      <blockquote>"Our guide's uncle ran the camp at Erg Chebbi. We ate the same bread his family has made for the caravans for years — nothing about it felt arranged."</blockquote>
+      <cite>— R. Fontaine, Sahara Crossing, 2025</cite>
+    </div>
+    <div class="test-item">
+      <blockquote>"Six of us in one taxi for a week, and somehow that made the medina feel smaller and friendlier instead of overwhelming."</blockquote>
+      <cite>— A. Devi, Imperial Cities, 2025</cite>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="cta">
+  <div class="wrap">
+    <h2>Trips fill in the order they're asked for.</h2>
+    <a class="btn-primary" href="mailto:trips@erg.example">Write to us about a season</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-grid">
+    <span>Erg — Marrakech, Morocco</span>
+    <span class="mono">EST. 2016</span>
+    <span>© 2026 Erg Overland Co.</span>
+  </div>
+</footer>
+
+</body>
+</html>
